@@ -144,3 +144,120 @@ The client will give us the especifications according to 3 constrains:
 - IP: `18.203.127.78`
 
 ![AWS diagram](aws_diagram.jpg)
+
+# Steps to install the node.js app in the VM
+
+# 1 
+
+- Every day the IP address changes
+- I need to reselect the IP for the security group to allow it
+- scp file.pem localhost/address destination/address
+cp app home/ubuntu/app
+
+scp -i ~/.ssh/eng119.pem -r ~/DevOps/devops/starter-code/app ubuntu@ec2-3-249-220-177.eu-west-1.compute.amazonaws.com:~/home/ubuntu/app
+
+
+
+"C:\DevOps\devops\starter-code\app"
+"C:\DevOps\devops\app"
+
+rsaync also can be used
+- enter new IP
+- install nodejs with required dependencies
+
+# 2
+allow port 3000
+cd app
+npm install
+nmp start
+
+# 3
+configure Nginx reverse proxy
+access the app without adding port 3000
+
+# 4
+Configure Mongodb
+spin up a new EC2 instance in eu-west-1 (Ireland)
+create a security group to allow required ports 27017
+port 22
+
+
+export DB_HOST=mongodb://3.248.187.17:27017/posts
+
+VM
+ssh -i "eng119.pem" ubuntu@ec2-3-249-220-177.eu-west-1.compute.amazonaws.com
+3.249.220.177
+
+DB
+ssh -i "eng119.pem" ubuntu@ec2-3-248-187-17.eu-west-1.compute.amazonaws.com
+3-248-187-17
+
+# Create 2 new instances and do everything again
+
+1) create a EC2 instance
+
+Auto-assign Public IP: `enable`
+
+Security group SSH: add my IP
+Add port 80, allow from anywhere
+
+Custom TCP Rule: 27017  IP/32
+
+VM Public IP address = 52.48.86.22
+ssh -i "eng119.pem" ubuntu@ec2-52-48-86-22.eu-west-1.compute.amazonaws.com
+
+2) Create a new instance to install the Mongo database
+
+- create a new security group and add the VM IP address
+
+DB = 3.249.117.186
+ssh -i "eng119.pem" ubuntu@ec2-3-249-117-186.eu-west-1.compute.amazonaws.com
+
+
+
+
+3) Copy the app files into the VM
+
+- clone the repository into the VM
+- install nginx `sudo apt-get install nginx`
+- install nodejs 
+`sudo apt install software-properties-common -y 
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt-get install nodejs -y`
+
+- install npm
+- start npm
+- the app should be available on port 3000
+
+
+4) Create a new EC2 instance to install Mongodb on it
+
+5) Create a new security group for the new EC2 instance
+
+- configure 2 rules: 
+
+1- SSH, port 22, myIP
+2- HTTP, PORT 27017 
+
+
+
+
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv D68FA50FEA312927
+    
+    echo"deb https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse"| sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+    
+    sudo apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
+
+sudo systemctl mongod status active
+
+export DB_HOST=mongodb://34.242.3.202:27017/posts
+
+node app.js
+
+config.sys: change to 0.0.0.0
+
+printvar 
+
+
+
+

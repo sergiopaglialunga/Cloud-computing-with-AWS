@@ -267,7 +267,8 @@ sre_jenkins_cicd
 
 # Architecting on AWS: Building a Two-Tier Application
 
-Add diagram 1 - 2
+![AWS diagram](aws_diagram.jpg)
+![AWS diagram](2tier_arch.png)
 
 This is an example of architecting on AWS to build a common two-tier application deployment.
 

@@ -150,16 +150,11 @@ The client will give us the especifications according to 3 constrains:
 # 1 
 
 - Every day the IP address changes
-- I need to reselect the IP for the security group to allow it
+- I need to reselect the IP for the security group to allow it (my ip)
 - scp file.pem localhost/address destination/address
-cp app home/ubuntu/app
 
-scp -i ~/.ssh/eng119.pem -r ~/DevOps/devops/starter-code/app ubuntu@ec2-3-249-220-177.eu-west-1.compute.amazonaws.com:~/home/ubuntu/app
-
-
-
-"C:\DevOps\devops\starter-code\app"
-"C:\DevOps\devops\app"
+from root:
+scp -i ~/.ssh/eng119.pem -r ~/Documents/app ubuntu@ec2-34-254-200-213.eu-west-1.compute.amazonaws.com:~/devops/app
 
 rsaync also can be used
 - enter new IP
@@ -181,16 +176,7 @@ spin up a new EC2 instance in eu-west-1 (Ireland)
 create a security group to allow required ports 27017
 port 22
 
-
 export DB_HOST=mongodb://3.248.187.17:27017/posts
-
-VM
-ssh -i "eng119.pem" ubuntu@ec2-3-249-220-177.eu-west-1.compute.amazonaws.com
-3.249.220.177
-
-DB
-ssh -i "eng119.pem" ubuntu@ec2-3-248-187-17.eu-west-1.compute.amazonaws.com
-3-248-187-17
 
 # Create 2 new instances and do everything again
 
@@ -203,24 +189,12 @@ Add port 80, allow from anywhere
 
 Custom TCP Rule: 27017  IP/32
 
-VM Public IP address = 52.48.86.22
-ssh -i "eng119.pem" ubuntu@ec2-52-48-86-22.eu-west-1.compute.amazonaws.com
-
-2) Create a new instance to install the Mongo database
-
-- create a new security group and add the VM IP address
-
-DB = 3.249.117.186
-ssh -i "eng119.pem" ubuntu@ec2-3-249-117-186.eu-west-1.compute.amazonaws.com
-
-
-
-
-3) Copy the app files into the VM
+2) Copy the app files into the VM
 
 - clone the repository into the VM
 - install nginx `sudo apt-get install nginx`
 - install nodejs 
+
 `sudo apt install software-properties-common -y 
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install nodejs -y`
@@ -229,17 +203,14 @@ sudo apt-get install nodejs -y`
 - start npm
 - the app should be available on port 3000
 
+3) Create a new EC2 instance to install Mongodb on it
 
-4) Create a new EC2 instance to install Mongodb on it
-
-5) Create a new security group for the new EC2 instance
+- Create a new security group for the new EC2 instance
 
 - configure 2 rules: 
 
 1- SSH, port 22, myIP
-2- HTTP, PORT 27017 
-
-
+2- HTTP, PORT 27017: allow the EC2 with the app to connect with the db
 
 
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv D68FA50FEA312927
@@ -248,16 +219,215 @@ sudo apt-get install nodejs -y`
     
     sudo apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
 
-sudo systemctl mongod status active
 
 export DB_HOST=mongodb://34.242.3.202:27017/posts
 
 node app.js
 
-config.sys: change to 0.0.0.0
+create env DB_HOST:mongodb://db-ip-add:27017/posts
 
-printvar 
+cd /etc
+sudo nano mongo.conf
+config.sys: 
+# network interfaces
+bindIp: 0.0.0.0
+change to 0.0.0.0
 
+(check if the changes were saved)
+cat mongo.conf
+
+restart mongodb
+
+
+sudo systemctl start mongod
+sudo systemctl restart mongod
+sudo systemctl enable mongod
+sudo systemctl status mongod
+
+if I need to stop the nginx process
+
+ps aux
+get the node id
+sudo kill id=1282
+
+
+# Amazon Machine Images (AMI)
+
+## Building an AMI
+
+/app
+(put the ip from the data instance)
+sudo echo "export DB_HOST=mongodb://54.75.82.219:27017/posts" >> ~/.bashrc
+source ~/.bashrc
+printenv DB_HOST
+
+sre_jenkins_cicd
+/environment/db
+
+
+# Architecting on AWS: Building a Two-Tier Application
+
+Add diagram 1 - 2
+
+This is an example of architecting on AWS to build a common two-tier application deployment.
+
+The notion of a scalable, on-demand, pay-as-you-go cloud infrastructure tends to be easily understood by the majority of today’s IT specialists. However, in order to fully reap the benefits from hosting solutions in the cloud, you will have to rethink traditional ‘on-premises’ design approaches. This should happen for a variety of reasons with the most prominent ones the design-for-costs or the adoption of a design-for-failure approach.
+
+A two-tier architecture is a software architecture in which a presentation layer or interface runs on a client, and a data layer or data structure gets stored on a server. Separating these two components into different locations represents a two-tier architecture, as opposed to a single-tier architecture.
+
+On the client application side the code is written for saving the data in the SQL server database. Client sends the request to the server and it processes the request & sends it back with data. The main problem of two tier architecture is the server cannot respond to multiple requests at the same time, as a result it causes a data integrity issue.
+
+It’s also called server-client technology.
+
+Advantages:
+
+-Easy to maintain and modification is bit easy
+-Communication is faster
+
+Disadvantages:
+
+-In two tier architecture application performance will be degraded as soon as the number of users increases.
+-Cost-ineffective
+
+## 1) Client Application (Client Tier)
+
+I will create an EC2 instance and install nginx, which is an open-source web server that can also be used as a reverse proxy.
+It's open source and free to use, so anyone can download and install the software and use it to host a website. 
+The NGINX software has not been installed on your computer – it runs only on computers that are serving web pages.
+
+I also need to move the files with the web application from my laptop into the EC2 instance. 
+The Unix command scp (which stands for "secure copy protocol") is a simple tool for uploading or downloading files.
+
+`scp -i ~/.ssh/eng119.pem -r ~/Downloads/app ubuntu@ec2-54-74-247-127.eu-west-1.compute.amazonaws.com:~`
+
+SSH into the EC2 instance and install all the required dependencies:
+
+- Check if I have internet access into the EC2 instance: `sudo apt-get update` `sudo apt-get upgrade`
+- Nginx (web server): `sudo apt-get install nginx`
+- Nodejs: 
+
+`sudo apt install software-properties-common -y`
+`curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`
+`sudo apt-get install nodejs -y`
+
+- Npm:
+
+`sudo apt-get install npm`
+`sudo apt-get start npm`
+
+I have to add the security rules to allow the application to use port 3000 on the EC2 instance public ip.
+
+I will also use Nginx as a reverse proxy: 
+
+Within the server block you should have an existing location / block. 
+Replace the contents of that block with the following configuration:
+
+location / {
+        proxy_pass http://localhost:3000; 
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+}
+
+I will an additional location block to the same server block to provide access to other applications on the same server.
+
+location / fibonacci/:n {
+        proxy_pass http://localhost:3000; 
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+}
+
+- Make sure I didn’t introduce any syntax errors by typing: `sudo nginx -t`
+
+- Restart nginx `sudo systemctl restart nginx`
+
+## 2) Database Tier (Data Tier)
+
+### Create a new EC2 instance to install Mongodb on it
+
+MongoDB is a general-purpose, NoSQL database that provides support for JSON-styled, document-oriented storage systems. Its flexible data model enables you to store data of any structure, and it provides full index support, sharding, and replication.
+
+- Choose a different security group for the new EC2 instance
+
+- configure 2 rules: 
+
+1- SSH, port 22, myIP
+2- HTTP, PORT 27017: allow the EC2 with the app to connect with the db: provide the ip of the EC2 of the client tier (with the node app)
+
+### Install Mongodb:
+
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv D68FA50FEA312927
+echo "deb https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse"| sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+sudo apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
+
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+sudo add-apt-repository 'deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse'
+sudo apt update
+sudo apt install mongodb-org
+
+cd /etc
+sudo nano mongo.conf
+config.sys: 
+
+network interfaces:
+
+-bindIp: 0.0.0.0 (allow anybody to connect with the database)
+
+Check if the changes were saved:
+
+cat mongo.conf
+
+restart mongodb
+
+`sudo systemctl start mongod`
+`sudo systemctl restart mongod`
+`sudo systemctl enable mongod`
+`sudo systemctl status mongod`
+
+### SSH in Client tier to create an env variable
+
+- I have to SSH in the EC2 (client tier) to create an environment variable:
+
+When we run a command, any settings that you specified with environment variables take precedence over the settings stored in the configuration file.
+
+I will pass new settings to the configuration file to connect the client tier with the data tier.
+
+To set an environment variable the `export` command is used. We give the variable a name, which is what is used to access it in the app.js configuration and then a value to hold the data that is needed in the variable, which is the ip of the data tier.
+
+- Persisting Environment Variables for a User
+
+When an environment variable is set from the shell using the export command, its existence ends when the user’s sessions ends. This is problematic when we need the variable to persist across sessions.
+
+To make an environment persistent for a user’s environment, we export the variable from the user’s profile script.
+
+Adding the environment variable to a user’s bash profile alone will not export it automatically. However, the variable will be exported the next time the user logs in.
+
+In order to set a permanent environment variable in Bash, I have to use the export command and add it either to my “.bashrc” file
+
+To immediately apply all changes to bash_profile for my current session, I will use the source command to source my .bashrc file.
+
+
+create environment variable = DB_HOST
+(put the ip from the data tier)
+
+`sudo echo "export DB_HOST=mongodb://54.75.82.219:27017/posts" >> ~/.bashrc`
+
+`source ~/.bashrc`
+
+printenv DB_HOST
+
+
+
+if I need to stop the nginx process
+
+ps aux
+get the node id
+sudo kill id=1282
 
 
 

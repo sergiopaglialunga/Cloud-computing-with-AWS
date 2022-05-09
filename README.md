@@ -364,15 +364,17 @@ MongoDB is a general-purpose, NoSQL database that provides support for JSON-styl
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv D68FA50FEA312927
 echo "deb https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse"| sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+
+sudo apt-get update
+sudo apt-get upgrade
+
 sudo apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
 
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-sudo add-apt-repository 'deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse'
-sudo apt update
+
 sudo apt install mongodb-org
 
 cd /etc
-sudo nano mongo.conf
+sudo nano mongod.conf
 config.sys: 
 
 network interfaces:
@@ -381,7 +383,7 @@ network interfaces:
 
 Check if the changes were saved:
 
-cat mongo.conf
+cat mongod.conf
 
 restart mongodb
 
@@ -422,9 +424,7 @@ create environment variable = DB_HOST
 
 printenv DB_HOST
 
-
-
-if I need to stop the nginx process
+- if I need to stop the nginx process
 
 ps aux
 get the node id

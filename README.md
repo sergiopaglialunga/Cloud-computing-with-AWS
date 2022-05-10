@@ -430,5 +430,215 @@ ps aux
 get the node id
 sudo kill id=1282
 
+# Features of Amazon S3
+
+## Storage classes
+
+Amazon S3 offers a range of storage classes designed for different use cases. For example, you can store mission-critical production data in S3 Standard for frequent access, save costs by storing infrequently accessed data in S3 Standard-IA or S3 One Zone-IA, and archive data at the lowest costs in S3 Glacier Instant Retrieval, S3 Glacier Flexible Retrieval, and S3 Glacier Deep Archive.
+
+You can store data with changing or unknown access patterns in S3 Intelligent-Tiering, which optimizes storage costs by automatically moving your data between four access tiers when your access patterns change. These four access tiers include two low-latency access tiers optimized for frequent and infrequent access, and two opt-in archive access tiers designed for asynchronous access for rarely accessed data.
+
+# How Amazon S3 works
+
+Amazon S3 is an object storage service that stores data as objects within buckets. An object is a file and any metadata that describes the file. A bucket is a container for objects.
+
+To store your data in Amazon S3, you first create a bucket and specify a bucket name and AWS Region. Then, you upload your data to that bucket as objects in Amazon S3. Each object has a key (or key name), which is the unique identifier for the object within the bucket.
+
+S3 provides features that you can configure to support your specific use case. For example, you can use S3 Versioning to keep multiple versions of an object in the same bucket, which allows you to restore objects that are accidentally deleted or overwritten.
+
+Buckets and the objects in them are private and can be accessed only if you explicitly grant access permissions. You can use bucket policies, AWS Identity and Access Management (IAM) policies, access control lists (ACLs), and S3 Access Points to manage access.
+
+crud (create, read, update, delete)
+aws cli (command line interface)
+aws
+
+s3 Bucket: single storage object: stores any kind of data
+social media uses it – don’t care about the format of the data
+flexibility – cost effective 
+
+It is related to disaster recovery: can be used as a backup data
+
+if I need to communicate with an S3 from an instance I will need a key
+
+AWS secret and secret keys using AWSCLI (add to the diagram)
+
+AWS is built using python
+
+access key + secret key = I need to have both of them 
+
+![AWS diagram](S3_diagram1.png)
+
+
+sudo pip3 install awscli
+sudo python3 -m pip install awscli
+ sudo apt install python3-pip -y
+alias python=python3
+
+AWS configure file
+1-AWS access key
+2- AWS secret key
+3- format json
+4- regions: eu-west-1
+
+aws configure
+aws s3 ls
+
+aws s3 mb s3://eng
+
+make bucket
+
+aws s3 mb s3://eng110-sergio
+
+# Accessing Amazon S3
+
+## AWS Management Console
+
+The console is a web-based user interface for managing Amazon S3 and AWS resources. If you've signed up for an AWS account, you can access the Amazon S3 console by signing into the AWS Management Console and choosing S3 from the AWS Management Console home page.
+
+## AWS Command Line Interface
+
+You can use the AWS command line tools to issue commands or build scripts at your system's command line to perform AWS (including S3) tasks.
+
+## AWS SDKs
+
+AWS provides SDKs (software development kits) that consist of libraries and sample code for various programming languages and platforms (Java, Python, Ruby, .NET, iOS, Android, and so on). The AWS SDKs provide a convenient way to create programmatic access to S3 and AWS. Amazon S3 is a REST service. You can send requests to Amazon S3 using the AWS SDK libraries. which wrap the underlying Amazon S3 REST API and simplify your programming tasks. For example, the SDKs take care of tasks such as calculating signatures, cryptographically signing requests, managing errors, and retrying requests automatically.
+
+## Amazon S3 REST API
+
+The architecture of Amazon S3 is designed to be programming language-neutral, using AWS-supported interfaces to store and retrieve objects. You can access S3 and AWS programmatically by using the Amazon S3 REST API. The REST API is an HTTP interface to Amazon S3. With the REST API, you use standard HTTP requests to create, fetch, and delete buckets and objects.
+
+To use the REST API, you can use any toolkit that supports HTTP. You can even use a browser to fetch objects, as long as they are anonymously readable.
+
+The REST API uses standard HTTP headers and status codes, so that standard browsers and toolkits work as expected. In some areas, we have added functionality to HTTP (for example, we added headers to support access control). In these cases, we have done our best to add the new functionality in a way that matches the style of standard HTTP usage.
+
+If you make direct REST API calls in your application, you must write the code to compute the signature and add it to the request.
+
+# Reading a Specific File from an S3 bucket Using Python
+
+https://www.sqlservercentral.com/articles/reading-a-specific-file-from-an-s3-bucket-using-python
+
+How can I connect to an AWS S3 bucket to read a specific file from a list of objects stored in S3?:
+
+ We will then import the data in the file and convert the raw data into a Pandas data frame using Python for more deeper structured analysis.
+
+# Solution
+
+In this section we will look at how we can connect to AWS S3 using the boto3 library to access the objects stored in S3 buckets, read the data, rearrange the data in the desired format and write the cleaned data into the csv data format to import it as a file into Python Integrated Development Environment (IDE) for advanced data analytics use cases.
+
+We can use any IDE, like Spyder or JupyterLab (of the Anaconda Distribution). Here we are using JupyterLab.
+
+The first step would be to import the necessary packages into the IDE. Boto is the Amazon Web Services (AWS) SDK for Python.
+
+Identify the bucket that you would like to access where you have your data stored. Once you have identified the name of the bucket for instance ‘filename_prod’, you can assign this name to the variable named s3_bucket name as shown in the script below:
+
+"""Accessing the S3 buckets using boto3 client"""
+s3_client =boto3.client('s3')
+s3_bucket_name='filename_prod'
+s3 = boto3.resource('s3',
+                    aws_access_key_id= 'YOUR_ACCESS_KEY_ID',
+                    aws_secret_access_key='YOUR_SECRET_ACCESS_KEY')
+
+
+# s3 naming convention - bucket policies
+
+Bucket naming rules
+
+The following rules apply for naming buckets in Amazon S3:
+
+Bucket names must be between 3 (min) and 63 (max) characters long.
+
+Bucket names can consist only of lowercase letters, numbers, dots (.), and hyphens (-).
+
+Bucket names must begin and end with a letter or number.
+
+Bucket names must not be formatted as an IP address (for example, 192.168.5.4).
+
+Bucket names must not start with the prefix xn--.
+
+Bucket names must not end with the suffix -s3alias. This suffix is reserved for access point alias names. For more information, see Using a bucket-style alias for your access point.
+
+Bucket names must be unique across all AWS accounts in all the AWS Regions within a partition. A partition is a grouping of Regions. AWS currently has three partitions: aws (Standard Regions), aws-cn (China Regions), and aws-us-gov (AWS GovCloud (US)).
+
+A bucket name cannot be used by another AWS account in the same partition until the bucket is deleted.
+
+Buckets used with Amazon S3 Transfer Acceleration can't have dots (.) in their names. For more information about Transfer Acceleration, see Configuring fast, secure file transfers using Amazon S3 Transfer Acceleration.
+
+For best compatibility, we recommend that you avoid using dots (.) in bucket names, except for buckets that are used only for static website hosting. If you include dots in a bucket's name, you can't use virtual-host-style addressing over HTTPS, unless you perform your own certificate validation. This is because the security certificates used for virtual hosting of buckets don't work for buckets with dots in their names.
+
+This limitation doesn't affect buckets used for static website hosting, because static website hosting is only available over HTTP. For more information about virtual-host-style addressing, see Virtual hosting of buckets. For more information about static website hosting, see Hosting a static website using Amazon S3.
+
+## Prepare de environment
+
+sudo apt-get update
+sudo apt-get upgrade 
+
+alias python=python3
+sudo apt install python3-pip -y
+
+(if this doesn't work, try)
+sudo apt install python-pip
+sudo pip3 install awscli
+sudo python3 -m pip install awscli
+
+pip install boto3
+
+## AWS configure file
+
+aws configure
+
+1- key
+2- ke2
+3- format: json
+4- regions: eu-west-1
+
+
+make bucket:
+
+aws s3 mb s3://eng110-sergio
+
+aws s3 ls
+remove file:
+aws s3 rm s3://eng110-sergio/test.txt
+-- recursive (careful!)
+
+remove bucket (if it's empty)
+aws s3 rb s3://eng110-sergio
+
+ 
+## Exercise:
+
+Launch new EC2 ubuntu instance :
+Next:
+Research the documentation on AWS/Python for python boto3 package to create and manage AWS S3 resources and complete all the following tasks
+DOD:
+
+Setting up awscli and python Env with required dependencies
+S3 authentication setup - with aws configure on EC2
+
+1- Create S3 bucket using python-boto3
+2- Upload data/file to S3 bucket using python-boto3
+3- Retrieve content/file from S3 using python-boto3
+4- Delete Content from S3 using python-boto3
+5- Delete the bucket using python-boto3.
+
+Hint: create a function for operation
+- to upload data
+- download
+- update - replace -
+- delete
+Apply OOP where possible
+
+vi file1.py
+python file1.py
+
+Boto3 = AWS Software Development Kit (SDK) for python
+
+
+
+
+
+
+
+
 
 

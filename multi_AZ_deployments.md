@@ -55,8 +55,6 @@ Each target group routes requests to one or more registered targets, such as EC2
 
 ## Auto scaling group
 
-
-
 ## Monitoring service for AWS resources: EC2 autoscaling group
 
 Alert management: notification service
@@ -65,9 +63,171 @@ SQS Simple Queue Service
 
 Metrics: we can put them on a dashboard
 
-SRE: 
+# What is Elastic Load Balancing?
+
+Elastic Load Balancing automatically distributes your incoming traffic across multiple targets, such as EC2 instances, containers, and IP addresses, in one or more Availability Zones. It monitors the health of its registered targets, and routes traffic only to the healthy targets. Elastic Load Balancing scales your load balancer as your incoming traffic changes over time. It can automatically scale to the vast majority of workloads.
+
+## Load balancer benefits
+
+A load balancer distributes workloads across multiple compute resources, such as virtual servers. Using a load balancer increases the availability and fault tolerance of your applications.
+
+You can add and remove compute resources from your load balancer as your needs change, without disrupting the overall flow of requests to your applications.
+
+You can configure health checks, which monitor the health of the compute resources, so that the load balancer sends requests only to the healthy ones. You can also offload the work of encryption and decryption to your load balancer so that your compute resources can focus on their main work.
+
+## Features of Elastic Load Balancing
+
+Elastic Load Balancing supports the following load balancers: Application Load Balancers, Network Load Balancers, Gateway Load Balancers, and Classic Load Balancers. You can select the type of load balancer that best suits your needs.
+
+# Networking – VPC architecture
+
+# Wwhat is a VPC and a service attached to VPC
+![AWS diagram](diagrams/2tier_arch.png)
+
+## What is Amazon VPC?
+
+Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that you've defined. This virtual network closely resembles a traditional network that you'd operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
+
+### VPCs and subnets
+
+A virtual private cloud (VPC) is a virtual network dedicated to your AWS account. It is logically isolated from other virtual networks in the AWS Cloud. You can launch your AWS resources, such as Amazon EC2 instances, into your VPC. You can specify an IP address range for the VPC, add subnets, associate security groups, and configure route tables.
+
+A subnet is a range of IP addresses in your VPC. You can launch AWS resources into a specified subnet. Use a public subnet for resources that must be connected to the internet, and a private subnet for resources that won't be connected to the internet.
+
+Amazon Virtual Private Cloud (VPC) is a commercial cloud computing service that provides users a virtual private cloud, by "provision[ing] a logically isolated section of Amazon Web Services (AWS) Cloud".[1] Enterprise customers are able to access the Amazon Elastic Compute Cloud (EC2) over an IPsec based virtual private network.[2][3] Unlike traditional EC2 instances which are allocated internal and external IP numbers by Amazon, the customer can assign IP numbers of their choosing from one or more subnets.[4] By giving the user the option of selecting which AWS resources are public facing and which are not, VPC provides much more granular control over security. For Amazon it is "an endorsement of the hybrid approach, but it's also meant to combat the growing interest in private clouds".
+
+## 1) internet gateway
+
+Connect to the internet using an internet gateway
+An internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows communication between your VPC and the internet. An internet gateway enables resources (like EC2 instances) in your public subnets to connect to the internet if the resource has a public IPv4 address or an IPv6 address. Similarly, resources on the internet can initiate a connection to resources in your subnet using the public IPv4 address or IPv6 address. For example, an internet gateway enables you to connect to an EC2 instance in AWS using your local computer.
+
+An internet gateway serves two purposes: to provide a target in your VPC route tables for internet-routable traffic, and to perform network address translation (NAT) for instances that have been assigned public IPv4 addresses. For more information, see Enable internet access.
+
+An internet gateway supports IPv4 and IPv6 traffic. It does not cause availability risks or bandwidth constraints on your network traffic. There's no additional charge for having an internet gateway in your account.
+Enable internet access
+
+To enable access to or from the internet for instances in a subnet in a VPC, you must do the following.
+•	Create an internet gateway and attach it to your VPC.
+•	Add a route to your subnet's route table that directs internet-bound traffic to the internet gateway.
+•	Ensure that instances in your subnet have a globally unique IP address (public IPv4 address, Elastic IP address, or IPv6 address).
+•	Ensure that your network access control lists and security group rules allow the relevant traffic to flow to and from your instance.
+
+### Public and private subnets
+
+If a subnet is associated with a route table that has a route to an internet gateway, it's known as a public subnet. If a subnet is associated with a route table that does not have a route to an internet gateway, it's known as a private subnet.
+In your public subnet's route table, you can specify a route for the internet gateway to all destinations not explicitly known to the route table (0.0.0.0/0 for IPv4 or ::/0 for IPv6). Alternatively, you can scope the route to a narrower range of IP addresses; for example, the public IPv4 addresses of your company’s public endpoints outside of AWS, or the Elastic IP addresses of other Amazon EC2 instances outside your VPC.
+
+## 2) routing table
+
+A route table contains a set of rules, called routes, that determine where network traffic from your subnet or gateway is directed.
+
+## 3) what is a subnet
+
+Subnet route tables
+Your VPC has an implicit router, and you use route tables to control where network traffic is directed. Each subnet in your VPC must be associated with a route table, which controls the routing for the subnet (subnet route table). You can explicitly associate a subnet with a particular route table. Otherwise, the subnet is implicitly associated with the main route table. A subnet can only be associated with one route table at a time, but you can associate multiple subnets with the same subnet route table.
+
+10.0.8.0/24
+
+## 4) what is CIDR block
+
+The CIDR block is a fixed prefix length of /56. You can request an IPv6 CIDR block from Amazon's pool of IPv6 addresses. If you've associated an IPv6 CIDR block with your VPC, you can associate an IPv6 CIDR block with an existing subnet in your VPC, or when you create a new subnet.
+
+## 5) sub-mask
+
+Each network, by default, has only one subnet, which contains all of the host addresses defined within. A netmask is basically a specification of the amount of address bits that are used for the network portion. A subnet mask is another netmask within used to further divide the network.
+A subnet mask is used to divide an IP address into two parts. One part identifies the host (computer), the other part identifies the network to which it belongs
+
+## 6) IP-networking
+
+Short description. An Elastic IP address is a static public IPv4 address associated with your AWS account in a specific Region. Unlike an auto-assigned public IP address, an Elastic IP address is preserved after you stop and start your instance in a virtual private cloud (VPC)
+
+## 7) NACL
+
+An (extra) optional layer of security that acts as a firewall for controlling traffic in and out of a subnet. You can associate multiple subnets with a single network ACL, but a subnet can be associated with only one network ACL at a time.
+
+Example of tickets to access an stadium, or a cinema exhibiting many film
+
+with an NACL I have to define an exit rule (in and out)
+
+a subnet can have many EC2 instances (servers)
+
+# steps to create a VPC
+
+![AWS diagram](diagrams/aws-VPC.png)
+
+1) create VPC
+
+eng110-sergio-vpc
+VPC only
+IPv4 CIDR
+provide CIDR: 10.0.1.0/16
+
+TAG again: eng110-sergio-vpc
+
+2) create gateway
+
+eng110-sergio-ig
+
+3) attached gateway to VPC
+
+we need to provide the VPC address to the gateway
+
+- select the Internet gateway
+- click on Actions: Attach to VPC
+- select my VPC
+
+4) create subnet
+
+select the VCP ID
+eng110-sergio-sb-public
+
+- Availability Zone: no preference
+- IPv4 CIDR block: 10.0.1.0/24
+- tag
+
+5) create route table
+
+eng110-sergio-rt-public
+
+-select my VPC: eng110-sergio-vpc 
+- tag
+
+At this point, this route table only knows which VPC to connect with, but doesn't know to which subnet
+
+- create route table (to edit it later)
+
+6) Edit route table: Routes
+
+we need to connect it the gateway, to let the external traffic to come in
+
+Edit routes: add another rule
+
+- Destination: 0.0.0.0/0 (anyone)
+- Target: internet gateway (when I select it my gateway will pop out)
+
+7) Edit route table: Subnet associates
+
+Now we need to link the subnet with the route table
+
+- Click on: Edit subnet associations
+- Under available subnets, select mine
+- Save associations 
+
+8) Now we have to test if everything is OK
+
+- Launch instance from AMI
+
+21:31
 
 
 
 
+
+we need to install updates in the MongoDB
+
+it can be done by multiple services, use the one that works for us
+
+run npm in the backgroud
+
+make diagram - add subnets
 

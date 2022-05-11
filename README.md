@@ -269,6 +269,8 @@ sre_jenkins_cicd
 
 # Architecting on AWS: Building a Two-Tier Application
 
+(Sergio_2Tier_Architecture_AWS.mp4)
+
 ![AWS diagram](diagrams/aws_diagram.jpg)
 ![AWS diagram](diagrams/2tier_arch.png)
 

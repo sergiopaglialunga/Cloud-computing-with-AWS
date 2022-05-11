@@ -264,7 +264,7 @@ printenv DB_HOST
 sre_jenkins_cicd
 /environment/db
 
-![AWS diagram](create_ame.jpg)
+![AWS diagram](create_ami.jpg)
 
 
 # Architecting on AWS: Building a Two-Tier Application

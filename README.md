@@ -143,7 +143,7 @@ The client will give us the especifications according to 3 constrains:
 - Copy the VM Public IP address into my browser to access the nginx welcome page
 - IP: `18.203.127.78`
 
-![AWS diagram](aws_diagram.jpg)
+![AWS diagram](diagrams/aws_diagram.jpg)
 
 # Steps to install the node.js app in the VM
 
@@ -264,13 +264,13 @@ printenv DB_HOST
 sre_jenkins_cicd
 /environment/db
 
-![AWS diagram](create_ami.jpg)
+![AWS diagram](diagrams/create_ami.jpg)
 
 
 # Architecting on AWS: Building a Two-Tier Application
 
-![AWS diagram](aws_diagram.jpg)
-![AWS diagram](2tier_arch.png)
+![AWS diagram](diagrams/aws_diagram.jpg)
+![AWS diagram](diagrams/2tier_arch.png)
 
 This is an example of architecting on AWS to build a common two-tier application deployment.
 
@@ -372,7 +372,6 @@ sudo apt-get upgrade
 
 sudo apt-get install -y mongodb-org=3.2.20 mongodb-org-server=3.2.20 mongodb-org-shell=3.2.20 mongodb-org-mongos=3.2.20 mongodb-org-tools=3.2.20
 
-
 sudo apt install mongodb-org
 
 cd /etc
@@ -433,7 +432,7 @@ get the node id
 sudo kill id=1282
 
 # Features of Amazon S3
-
+![AWS diagram](diagrams/S3_diagram.png)
 ## Storage classes
 
 Amazon S3 offers a range of storage classes designed for different use cases. For example, you can store mission-critical production data in S3 Standard for frequent access, save costs by storing infrequently accessed data in S3 Standard-IA or S3 One Zone-IA, and archive data at the lowest costs in S3 Glacier Instant Retrieval, S3 Glacier Flexible Retrieval, and S3 Glacier Deep Archive.
@@ -462,34 +461,11 @@ It is related to disaster recovery: can be used as a backup data
 
 if I need to communicate with an S3 from an instance I will need a key
 
-AWS secret and secret keys using AWSCLI (add to the diagram)
+AWS secret and secret keys using AWSCLI
 
 AWS is built using python
 
 access key + secret key = I need to have both of them 
-
-![AWS diagram](S3_diagram1.png)
-
-
-sudo pip3 install awscli
-sudo python3 -m pip install awscli
- sudo apt install python3-pip -y
-alias python=python3
-
-AWS configure file
-1-AWS access key
-2- AWS secret key
-3- format json
-4- regions: eu-west-1
-
-aws configure
-aws s3 ls
-
-aws s3 mb s3://eng
-
-make bucket
-
-aws s3 mb s3://eng110-sergio
 
 # Accessing Amazon S3
 
@@ -569,7 +545,20 @@ For best compatibility, we recommend that you avoid using dots (.) in bucket nam
 
 This limitation doesn't affect buckets used for static website hosting, because static website hosting is only available over HTTP. For more information about virtual-host-style addressing, see Virtual hosting of buckets. For more information about static website hosting, see Hosting a static website using Amazon S3.
 
-## Prepare de environment
+## Prepare the environment
+
+## Amazon CLI (command line interface)
+
+## AWS configure file
+
+aws configure
+
+1- AWS access key
+2- AWS secret key
+3- region: eu-west-1
+4- format: json
+
+- I have to install python version 3:
 
 sudo apt-get update
 sudo apt-get upgrade 
@@ -584,28 +573,22 @@ sudo python3 -m pip install awscli
 
 pip install boto3
 
-## AWS configure file
+- List buckets:
 
-aws configure
+`aws s3 ls`
 
-1- key
-2- ke2
-3- format: json
-4- regions: eu-west-1
+- Make bucket:
 
+`aws s3 mb s3://eng110-sergio`
 
-make bucket:
+- Remove file:
 
-aws s3 mb s3://eng110-sergio
-
-aws s3 ls
-remove file:
-aws s3 rm s3://eng110-sergio/test.txt
+`aws s3 rm s3://eng110-sergio/test.txt`
 -- recursive (careful!)
 
-remove bucket (if it's empty)
-aws s3 rb s3://eng110-sergio
+- Remove bucket (if it's empty)
 
+`aws s3 rb s3://eng110-sergio`
  
 ## Exercise:
 
@@ -635,7 +618,7 @@ python file1.py
 
 Boto3 = AWS Software Development Kit (SDK) for python
 
-
+(The solution is in the Boto3 folder)
 
 
 

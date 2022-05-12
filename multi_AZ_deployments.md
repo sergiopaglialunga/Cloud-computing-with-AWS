@@ -155,6 +155,14 @@ with an NACL I have to define an exit rule (in and out)
 
 a subnet can have many EC2 instances (servers)
 
+Stateful firewalls are capable of monitoring and detecting states of all traffic on a network to track and defend based on traffic patterns and flows. Stateless firewalls, however, only focus on individual packets, using preset rules to filter traffic.
+
+The Stateful protocol design makes the design of server very complex and heavy. Stateless Protocols works better at the time of crash because there is no state that must be restored, a failed server can simply restart after a crash.
+
+Stateless Protocol is a network protocol in which Client send request to the server and server response back as per the given state. Stateful Protocol is a network protocol in which if client send a request to the server then it expects some kind of response, in case of no response then it resend the request.
+
+
+
 # AWS Virtual Private Cloud Architecture (VPC)
 ![AWS diagram](diagrams/aws-VPC.png)
 
@@ -268,3 +276,4 @@ make diagram - add subnets
 by Friday - documentation ready (will check)
 
 eng110-sergio-testing-db
+

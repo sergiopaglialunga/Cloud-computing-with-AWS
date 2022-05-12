@@ -153,6 +153,8 @@ Example of tickets to access an stadium, or a cinema exhibiting many film
 
 with an NACL I have to define an exit rule (in and out)
 
+we must define outbound rules for NACL, in the security group we only define inbound rules.
+
 a subnet can have many EC2 instances (servers)
 
 Stateful firewalls are capable of monitoring and detecting states of all traffic on a network to track and defend based on traffic patterns and flows. Stateless firewalls, however, only focus on individual packets, using preset rules to filter traffic.
@@ -271,9 +273,4 @@ allow the ec2 instance from the public subnet to send a request
 
 run npm in the backgroud
 
-make diagram - add subnets
-
-by Friday - documentation ready (will check)
-
-eng110-sergio-testing-db
 

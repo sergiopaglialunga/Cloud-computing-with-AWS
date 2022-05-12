@@ -164,7 +164,7 @@ Stateless Protocol is a network protocol in which Client send request to the ser
 
 
 # AWS Virtual Private Cloud Architecture (VPC)
-![AWS diagram](diagrams/aws-VPC.png)
+![AWS diagram](diagram/aws-VPC.png)
 
 1) Create VPC (Virtual Private Cloud)
 

@@ -417,10 +417,10 @@ In order to set a permanent environment variable in Bash, I have to use the expo
 
 To immediately apply all changes to bash_profile for my current session, I will use the source command to source my .bashrc file.
 
-
 create environment variable = DB_HOST
 (put the ip from the data tier)
 
+cd devops/app
 `sudo echo "export DB_HOST=mongodb://54.75.82.219:27017/posts" >> ~/.bashrc`
 
 `source ~/.bashrc`
@@ -431,7 +431,7 @@ printenv DB_HOST
 
 ps aux
 get the node id
-sudo kill id=1282
+sudo kill id
 
 # Features of Amazon S3
 ![AWS diagram](diagrams/S3_diagram.png)

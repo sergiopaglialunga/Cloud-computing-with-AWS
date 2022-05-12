@@ -81,20 +81,21 @@ Elastic Load Balancing supports the following load balancers: Application Load B
 
 # Networking – VPC architecture
 
-# Wwhat is a VPC and a service attached to VPC
-![AWS diagram](diagrams/2tier_arch.png)
+Amazon Virtual Private Cloud (VPC) is a commercial cloud computing service that provides users a virtual private cloud, by "provisioning a logically isolated section of Amazon Web Services (AWS) Cloud". Enterprise customers are able to access the Amazon Elastic Compute Cloud (EC2) over an IPsec based virtual private network. Unlike traditional EC2 instances which are allocated internal and external IP numbers by Amazon, the customer can assign IP numbers of their choosing from one or more subnets. By giving the user the option of selecting which AWS resources are public facing and which are not, VPC provides much more granular control over security. For Amazon it is "an endorsement of the hybrid approach, but it's also meant to combat the growing interest in private clouds".
+
+# What is a VPC and a service attached to VPC
+![AWS diagram](diagrams/VPC_diagram.png)
 
 ## What is Amazon VPC?
 
 Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that you've defined. This virtual network closely resembles a traditional network that you'd operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
 
 ### VPCs and subnets
+![AWS diagram](diagrams/VPC_subnet.jpeg)
 
 A virtual private cloud (VPC) is a virtual network dedicated to your AWS account. It is logically isolated from other virtual networks in the AWS Cloud. You can launch your AWS resources, such as Amazon EC2 instances, into your VPC. You can specify an IP address range for the VPC, add subnets, associate security groups, and configure route tables.
 
 A subnet is a range of IP addresses in your VPC. You can launch AWS resources into a specified subnet. Use a public subnet for resources that must be connected to the internet, and a private subnet for resources that won't be connected to the internet.
-
-Amazon Virtual Private Cloud (VPC) is a commercial cloud computing service that provides users a virtual private cloud, by "provision[ing] a logically isolated section of Amazon Web Services (AWS) Cloud".[1] Enterprise customers are able to access the Amazon Elastic Compute Cloud (EC2) over an IPsec based virtual private network.[2][3] Unlike traditional EC2 instances which are allocated internal and external IP numbers by Amazon, the customer can assign IP numbers of their choosing from one or more subnets.[4] By giving the user the option of selecting which AWS resources are public facing and which are not, VPC provides much more granular control over security. For Amazon it is "an endorsement of the hybrid approach, but it's also meant to combat the growing interest in private clouds".
 
 ## 1) internet gateway
 
@@ -104,7 +105,8 @@ An internet gateway is a horizontally scaled, redundant, and highly available VP
 An internet gateway serves two purposes: to provide a target in your VPC route tables for internet-routable traffic, and to perform network address translation (NAT) for instances that have been assigned public IPv4 addresses. For more information, see Enable internet access.
 
 An internet gateway supports IPv4 and IPv6 traffic. It does not cause availability risks or bandwidth constraints on your network traffic. There's no additional charge for having an internet gateway in your account.
-Enable internet access
+
+-Enable internet access
 
 To enable access to or from the internet for instances in a subnet in a VPC, you must do the following.
 •	Create an internet gateway and attach it to your VPC.
@@ -113,6 +115,7 @@ To enable access to or from the internet for instances in a subnet in a VPC, you
 •	Ensure that your network access control lists and security group rules allow the relevant traffic to flow to and from your instance.
 
 ### Public and private subnets
+![AWS diagram](diagrams/subnet.png)
 
 If a subnet is associated with a route table that has a route to an internet gateway, it's known as a public subnet. If a subnet is associated with a route table that does not have a route to an internet gateway, it's known as a private subnet.
 In your public subnet's route table, you can specify a route for the internet gateway to all destinations not explicitly known to the route table (0.0.0.0/0 for IPv4 or ::/0 for IPv6). Alternatively, you can scope the route to a narrower range of IP addresses; for example, the public IPv4 addresses of your company’s public endpoints outside of AWS, or the Elastic IP addresses of other Amazon EC2 instances outside your VPC.
@@ -121,12 +124,13 @@ In your public subnet's route table, you can specify a route for the internet ga
 
 A route table contains a set of rules, called routes, that determine where network traffic from your subnet or gateway is directed.
 
-## 3) what is a subnet
-
 Subnet route tables
 Your VPC has an implicit router, and you use route tables to control where network traffic is directed. Each subnet in your VPC must be associated with a route table, which controls the routing for the subnet (subnet route table). You can explicitly associate a subnet with a particular route table. Otherwise, the subnet is implicitly associated with the main route table. A subnet can only be associated with one route table at a time, but you can associate multiple subnets with the same subnet route table.
 
-10.0.8.0/24
+## 3) what is a subnet
+![AWS diagram](diagrams/pub_subnet.png)
+
+
 
 ## 4) what is CIDR block
 
@@ -143,7 +147,7 @@ Short description. An Elastic IP address is a static public IPv4 address associa
 
 ## 7) NACL
 
-An (extra) optional layer of security that acts as a firewall for controlling traffic in and out of a subnet. You can associate multiple subnets with a single network ACL, but a subnet can be associated with only one network ACL at a time.
+A network access control list (ACL) is an (extra) optional layer of security that acts as a firewall for controlling traffic in and out of a subnet. You might set up network ACLs with rules similar to your security groups in order to add an additional layer of security to your VPC. You can associate multiple subnets with a single network ACL, but a subnet can be associated with only one network ACL at a time.
 
 Example of tickets to access an stadium, or a cinema exhibiting many film
 
@@ -151,11 +155,10 @@ with an NACL I have to define an exit rule (in and out)
 
 a subnet can have many EC2 instances (servers)
 
-# steps to create a VPC
-
+# AWS Virtual Private Cloud Architecture (VPC)
 ![AWS diagram](diagrams/aws-VPC.png)
 
-1) create VPC
+1) Create VPC (Virtual Private Cloud)
 
 eng110-sergio-vpc
 VPC only
@@ -168,7 +171,7 @@ TAG again: eng110-sergio-vpc
 
 eng110-sergio-ig
 
-3) attached gateway to VPC
+3) attach gateway to VPC
 
 we need to provide the VPC address to the gateway
 
@@ -194,18 +197,16 @@ eng110-sergio-rt-public
 
 At this point, this route table only knows which VPC to connect with, but doesn't know to which subnet
 
-- create route table (to edit it later)
-
 6) Edit route table: Routes
 
-we need to connect it the gateway, to let the external traffic to come in
+We need to connect it to the gateway, to let the external traffic to come in
 
 Edit routes: add another rule
 
 - Destination: 0.0.0.0/0 (anyone)
 - Target: internet gateway (when I select it my gateway will pop out)
 
-7) Edit route table: Subnet associates
+7) Edit route table: Subnet associations
 
 Now we need to link the subnet with the route table
 
@@ -217,17 +218,53 @@ Now we need to link the subnet with the route table
 
 - Launch instance from AMI
 
-21:31
+eng110-sergio-vpc-testing-app
 
+## Create a Private Subnet for the data client (MongoDb) 
 
+1) create subnet
 
+select the VPC ID
+eng110-sergio-sb-private
 
+- Availability Zone: no preference
+- IPv4 CIDR block: 10.0.2.0/24
+- tag
+
+Now the private subnet is ready, I will create an EC2 from the AMI with the data tier (MongoDB)
+
+2) Launch instance from AMI (MongoDB)
+
+- Tag:
+
+- Select my VPC: ENG110-sergio-vpc
+
+- Auto-assign Public IP: enable
+
+2) Create a security group for the EC2
+
+Tag: eng110-sergio-vpc-testing-data
+
+3) Update the environment variable in the app instance
+
+db ip: 10.0.0.96
+
+sudo echo "export DB_HOST=mongodb://10.0.0.96:27017/posts" >> ~/.bashrc
+source ~/.bashrc
+printenv DB_HOST
 
 we need to install updates in the MongoDB
 
-it can be done by multiple services, use the one that works for us
+it can be done by multiple services, use the one that works for us (NAT device)
+
+security group for private subnet* and the instance : create a rule custom tcp allow all and put the CDR block of public subnet
+
+allow the ec2 instance from the public subnet to send a request
 
 run npm in the backgroud
 
 make diagram - add subnets
 
+by Friday - documentation ready (will check)
+
+eng110-sergio-testing-db

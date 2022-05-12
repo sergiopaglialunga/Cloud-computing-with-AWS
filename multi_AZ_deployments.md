@@ -130,9 +130,16 @@ Your VPC has an implicit router, and you use route tables to control where netwo
 ## 3) what is a subnet
 ![AWS diagram](diagrams/pub_subnet.png)
 
+ subnet is a range of IP addresses in your VPC. You can launch AWS resources into a specified subnet. Use a public subnet for resources that must be connected to the internet, and a private subnet for resources that won't be connected to the internet.
+
+To protect the AWS resources in each subnet, you can use multiple layers of security, including security groups and network access control lists (ACL).
+
+You can launch AWS resources, such as EC2 instances, into a specific subnet. When you create a subnet, you specify the IPv4 CIDR block for the subnet, which is a subset of the VPC CIDR block. Each subnet must reside entirely within one Availability Zone and cannot span zones. By launching instances in separate Availability Zones, you can protect your applications from the failure of a single zone.
 
 
 ## 4) what is CIDR block
+
+CIDR blocks are groups of addresses that share the same prefix and contain the same number of bits. The combination of multiple connecting CIDR blocks into a larger whole, sharing a common network prefix, is what constitutes supernetting. The size of CIDR blocks can be determined by the length of the prefix.
 
 The CIDR block is a fixed prefix length of /56. You can request an IPv6 CIDR block from Amazon's pool of IPv6 addresses. If you've associated an IPv6 CIDR block with your VPC, you can associate an IPv6 CIDR block with an existing subnet in your VPC, or when you create a new subnet.
 
@@ -163,10 +170,8 @@ The Stateful protocol design makes the design of server very complex and heavy. 
 
 Stateless Protocol is a network protocol in which Client send request to the server and server response back as per the given state. Stateful Protocol is a network protocol in which if client send a request to the server then it expects some kind of response, in case of no response then it resend the request.
 
-
-
 # AWS Virtual Private Cloud Architecture (VPC)
-![AWS diagram](diagram/aws-VPC.png)
+![AWS diagram](diagrams/aws_db.png)
 
 1) Create VPC (Virtual Private Cloud)
 

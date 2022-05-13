@@ -136,7 +136,6 @@ To protect the AWS resources in each subnet, you can use multiple layers of secu
 
 You can launch AWS resources, such as EC2 instances, into a specific subnet. When you create a subnet, you specify the IPv4 CIDR block for the subnet, which is a subset of the VPC CIDR block. Each subnet must reside entirely within one Availability Zone and cannot span zones. By launching instances in separate Availability Zones, you can protect your applications from the failure of a single zone.
 
-
 ## 4) what is CIDR block
 
 CIDR blocks are groups of addresses that share the same prefix and contain the same number of bits. The combination of multiple connecting CIDR blocks into a larger whole, sharing a common network prefix, is what constitutes supernetting. The size of CIDR blocks can be determined by the length of the prefix.
@@ -169,6 +168,8 @@ Stateful firewalls are capable of monitoring and detecting states of all traffic
 The Stateful protocol design makes the design of server very complex and heavy. Stateless Protocols works better at the time of crash because there is no state that must be restored, a failed server can simply restart after a crash.
 
 Stateless Protocol is a network protocol in which Client send request to the server and server response back as per the given state. Stateful Protocol is a network protocol in which if client send a request to the server then it expects some kind of response, in case of no response then it resend the request.
+
+![AWS diagram](diagrams/aws_subnets2.png)
 
 # AWS Virtual Private Cloud Architecture (VPC)
 ![AWS diagram](diagrams/aws_db.png)
